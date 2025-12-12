@@ -28,6 +28,9 @@ RUN composer install --no-dev --optimize-autoloader
 # Права на storage
 RUN chmod -R 775 storage bootstrap/cache
 
+# Создаём SQLite базу
+RUN touch database/database.sqlite
+
 # Генерируем ключ если нет
 RUN php artisan key:generate --force || true
 
@@ -35,4 +38,4 @@ RUN php artisan key:generate --force || true
 EXPOSE 10000
 
 # Запуск
-CMD php artisan migrate --force && php artisan db:seed --force && php artisan serve --host=0.0.0.0 --port=${PORT:-10000}
+CMD php artisan migrate --force && php artisan db:seed --force 2>/dev/null; php artisan serve --host=0.0.0.0 --port=${PORT:-10000}
