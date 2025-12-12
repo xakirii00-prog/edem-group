@@ -38,5 +38,9 @@ RUN php artisan key:generate --force || true
 # Порт
 EXPOSE 10000
 
+# Копируем скрипт запуска
+COPY start.sh /app/start.sh
+RUN chmod +x /app/start.sh
+
 # Запуск
-CMD php artisan migrate --force && php artisan db:seed --force 2>/dev/null; php artisan serve --host=0.0.0.0 --port=${PORT:-10000}
+CMD ["/bin/bash", "/app/start.sh"]
